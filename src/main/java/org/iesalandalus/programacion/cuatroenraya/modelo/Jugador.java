@@ -10,8 +10,8 @@ public record Jugador(String nombre, Ficha colorFichas) {
     }
     private void validarNombre(String nombre){
         Objects.requireNonNull(nombre, "El nombre no puede ser nulo.");
-        if (nombre.format("\\W*")){
-            throw new IllegalArgumentException(" ");
+        if (nombre.matches("\\s*")){
+            throw new IllegalArgumentException("El nombre no puede estar en blanco.");
         }
     }
     private void validarColorFichas(Ficha colorFichas){
