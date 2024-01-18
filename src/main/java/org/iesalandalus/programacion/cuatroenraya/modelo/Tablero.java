@@ -39,7 +39,7 @@ public class Tablero {
     }
 
     private void comprobarFicha(Ficha ficha){
-        Objects.requireNonNull(ficha, "Ficha incorrecta.");
+        Objects.requireNonNull(ficha, "La ficha no puede ser nula.");
     }
 
     private void comprobarColumna(int columna){
