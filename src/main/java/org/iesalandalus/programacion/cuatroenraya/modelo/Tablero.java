@@ -12,10 +12,15 @@ public class Tablero {
 
     public Tablero(){
         casillas = new Casilla[FILAS][COLUMNAS];
+        for (int i = 0; i < FILAS; i++){
+            for (int j = 0; j < COLUMNAS; j++){
+                casillas[i][j] = new Casilla();
+            }
+        }
     }
 
     private boolean columnaVacia(int columna){
-        return casillas[FILAS - 1][columna] == null;
+        return casillas[FILAS - 1][columna].getFicha() == null;
     }
 
     public boolean estaVacio(){
@@ -27,7 +32,7 @@ public class Tablero {
     }
 
     private boolean columnaLlena(int columna){
-        return casillas[0][columna] != null;
+        return casillas[0][columna].getFicha() != null;
     }
 
     public boolean estaLleno(){
@@ -50,13 +55,12 @@ public class Tablero {
 
     private int getPrimeraFilaVacia(int columna) throws OperationNotSupportedException {
         if (columnaLlena(columna)){
-            throw new OperationNotSupportedException("La columna está llena");
+            throw new OperationNotSupportedException("Columna llena.");
         }
-        int nFila = -1;
-        for (int i = 0; i < FILAS; i++){
-            if (casillas[i][columna] == null){
+        int nFila = -1 ;
+        for (int i = FILAS - 1; i >= 0  && nFila == -1; i--){
+            if (casillas[i][columna].getFicha() == null){
                 nFila = i;
-                break;
             }
         }
         return nFila;
@@ -98,7 +102,7 @@ public class Tablero {
         int filaInicial = filaSemilla - desplazamiento;
         int columnaInicial = columnaSemilla - desplazamiento;
         int contadorFichasIguales = 0;
-        for (int i = 0; i < desplazamiento && !objetivoAlcanzado(contadorFichasIguales); i++){
+        for (int i = 0; i <= desplazamiento && !objetivoAlcanzado(contadorFichasIguales); i++){
             if (casillas[filaInicial+i][columnaInicial+i].estaOcupada() && casillas[filaInicial+i][columnaInicial+i].getFicha().equals(ficha)) {
                 contadorFichasIguales++;
             } else {
@@ -113,7 +117,7 @@ public class Tablero {
         int filaInicial = filaSemilla - desplazamiento;
         int columnaInicial = columnaSemilla + desplazamiento;
         int contadorFichasIguales = 0;
-        for (int i = 0; i < desplazamiento && !objetivoAlcanzado(contadorFichasIguales); i++){
+        for (int i = 0; i <= desplazamiento && !objetivoAlcanzado(contadorFichasIguales); i++){
             if (casillas[filaInicial+i][columnaInicial-i].estaOcupada() && casillas[filaInicial+i][columnaInicial-i].getFicha().equals(ficha)) {
                 contadorFichasIguales++;
             } else {
@@ -128,14 +132,13 @@ public class Tablero {
     }
 
     public boolean introducirFicha(int columna, Ficha ficha) throws OperationNotSupportedException {
+
         if (estaLleno()) {
             throw new IllegalArgumentException("No se pueden introducir más fichas porque el tablero está lleno.");
         }
         comprobarColumna(columna);
         comprobarFicha(ficha);
-        if (columnaLlena(columna)){
-            throw new OperationNotSupportedException("La ficha no se puede introducir porque la columna está llena.");
-        }
+
         int fila = getPrimeraFilaVacia(columna);
         casillas[fila][columna].setFicha(ficha);
         return comprobarTirada(fila, columna, ficha);
@@ -147,14 +150,18 @@ public class Tablero {
         for (int i = 0; i < FILAS; i++){
             tablero.append("|");
             for (int j = 0; j < COLUMNAS; j++){
-                if (casillas[i][j] == null) {
+                if (casillas[i][j].getFicha() == null) {
                     tablero.append(" ");
                 } else {
-                    tablero.append(casillas[i][j]);
+                    tablero.append(casillas[i][j].getFicha());
                 }
             }
             tablero.append("|%n");
         }
-        return tablero.toString();
+        tablero.append(" ");
+        tablero.append("-".repeat(COLUMNAS));
+        tablero.append("%n");
+
+        return String.format(tablero.toString());
     }
 }
