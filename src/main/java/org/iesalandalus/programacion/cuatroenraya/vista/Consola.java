@@ -20,9 +20,9 @@ public class Consola {
     public static Ficha elegirColorFichas() {
         String color;
         do {
-            System.out.print("Dime el color de la ficha (A o V): ");
+            System.out.print("Dime el color de la ficha (AZUL o VERDE): ");
             color = Entrada.cadena();
-        } while (!("A".equals(color) || "V".equals(color)));
+        } while (!("AZUL".equals(color) || "VERDE".equals(color)));
         return Ficha.valueOf(color);
     }
 

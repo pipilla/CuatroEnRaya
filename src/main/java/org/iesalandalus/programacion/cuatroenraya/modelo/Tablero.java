@@ -97,35 +97,45 @@ public class Tablero {
     }
 
     private boolean comprobarDiagonalNE(int filaSemilla, int columnaSemilla, Ficha ficha) {
-        int desplazamiento = menor(FILAS - filaSemilla, COLUMNAS - columnaSemilla);
+        int desplazamiento = menor(FILAS - 1 - filaSemilla, columnaSemilla);
         int filaInicial = filaSemilla + desplazamiento;
         int columnaInicial = columnaSemilla - desplazamiento;
-        desplazamiento = menor(FILAS - filaInicial, COLUMNAS - columnaInicial);
+        desplazamiento = menor(filaInicial, COLUMNAS - 1 - columnaInicial);
         int contadorFichasIguales = 0;
-        for (int i = 0; i < desplazamiento && !objetivoAlcanzado(contadorFichasIguales); i++){
-            if (casillas[filaInicial-i][columnaInicial+i].estaOcupada() && casillas[filaInicial-i][columnaInicial+i].getFicha().equals(ficha)) {
+        boolean conseguido = false;
+        for (int i = 0; i < desplazamiento; i++){
+            if (casillas[filaInicial-i][columnaInicial+i].estaOcupada() && casillas[filaInicial+i][columnaInicial+i].getFicha().equals(ficha)) {
                 contadorFichasIguales++;
             } else {
                 contadorFichasIguales = 0;
             }
+            if (objetivoAlcanzado(contadorFichasIguales)){
+                conseguido = true;
+                break;
+            }
         }
-        return objetivoAlcanzado(contadorFichasIguales);
+        return conseguido;
     }
 
     private boolean comprobarDiagonalNO(int filaSemilla, int columnaSemilla, Ficha ficha) {
-        int desplazamiento = menor(filaSemilla, COLUMNAS - 1 - columnaSemilla);
-        int filaInicial = filaSemilla - desplazamiento;
+        int desplazamiento = menor(FILAS - 1 - filaSemilla, COLUMNAS - 1 - columnaSemilla);
+        int filaInicial = filaSemilla + desplazamiento;
         int columnaInicial = columnaSemilla + desplazamiento;
-        desplazamiento = menor(FILAS - filaInicial, COLUMNAS - columnaInicial);
+        desplazamiento = menor(filaInicial, columnaInicial);
         int contadorFichasIguales = 0;
-        for (int i = 0; i < desplazamiento && !objetivoAlcanzado(contadorFichasIguales); i++){
-            if (casillas[filaInicial+i][columnaInicial-i].estaOcupada() && casillas[filaInicial+i][columnaInicial-i].getFicha().equals(ficha)) {
+        boolean conseguido = false;
+        for (int i = 0; i < desplazamiento; i++){
+            if (casillas[filaInicial-i][columnaInicial-i].estaOcupada() && casillas[filaInicial-i][columnaInicial-i].getFicha().equals(ficha)) {
                 contadorFichasIguales++;
             } else {
                 contadorFichasIguales = 0;
             }
+            if (objetivoAlcanzado(contadorFichasIguales)){
+                conseguido = true;
+                break;
+            }
         }
-        return (objetivoAlcanzado(contadorFichasIguales));
+        return (conseguido);
     }
 
     private boolean comprobarTirada(int fila, int columna, Ficha ficha){
