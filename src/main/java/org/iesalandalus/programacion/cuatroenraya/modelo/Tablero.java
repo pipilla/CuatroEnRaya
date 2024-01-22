@@ -1,7 +1,6 @@
 package org.iesalandalus.programacion.cuatroenraya.modelo;
 
 import javax.naming.OperationNotSupportedException;
-import java.util.Arrays;
 import java.util.Objects;
 
 public class Tablero {
@@ -47,7 +46,7 @@ public class Tablero {
         Objects.requireNonNull(ficha, "La ficha no puede ser nula.");
     }
 
-    private void comprobarColumna(int columna){
+    public void comprobarColumna(int columna){
         if (columna >= COLUMNAS || columna < 0){
             throw new IllegalArgumentException("Columna incorrecta.");
         }
@@ -98,26 +97,28 @@ public class Tablero {
     }
 
     private boolean comprobarDiagonalNE(int filaSemilla, int columnaSemilla, Ficha ficha) {
-        int desplazamiento = menor(filaSemilla, columnaSemilla);
-        int filaInicial = filaSemilla - desplazamiento;
+        int desplazamiento = menor(FILAS - filaSemilla, COLUMNAS - columnaSemilla);
+        int filaInicial = filaSemilla + desplazamiento;
         int columnaInicial = columnaSemilla - desplazamiento;
+        desplazamiento = menor(FILAS - filaInicial, COLUMNAS - columnaInicial);
         int contadorFichasIguales = 0;
-        for (int i = 0; i <= desplazamiento && !objetivoAlcanzado(contadorFichasIguales); i++){
-            if (casillas[filaInicial+i][columnaInicial+i].estaOcupada() && casillas[filaInicial+i][columnaInicial+i].getFicha().equals(ficha)) {
+        for (int i = 0; i < desplazamiento && !objetivoAlcanzado(contadorFichasIguales); i++){
+            if (casillas[filaInicial-i][columnaInicial+i].estaOcupada() && casillas[filaInicial-i][columnaInicial+i].getFicha().equals(ficha)) {
                 contadorFichasIguales++;
             } else {
                 contadorFichasIguales = 0;
             }
         }
-        return (objetivoAlcanzado(contadorFichasIguales));
+        return objetivoAlcanzado(contadorFichasIguales);
     }
 
     private boolean comprobarDiagonalNO(int filaSemilla, int columnaSemilla, Ficha ficha) {
         int desplazamiento = menor(filaSemilla, COLUMNAS - 1 - columnaSemilla);
         int filaInicial = filaSemilla - desplazamiento;
         int columnaInicial = columnaSemilla + desplazamiento;
+        desplazamiento = menor(FILAS - filaInicial, COLUMNAS - columnaInicial);
         int contadorFichasIguales = 0;
-        for (int i = 0; i <= desplazamiento && !objetivoAlcanzado(contadorFichasIguales); i++){
+        for (int i = 0; i < desplazamiento && !objetivoAlcanzado(contadorFichasIguales); i++){
             if (casillas[filaInicial+i][columnaInicial-i].estaOcupada() && casillas[filaInicial+i][columnaInicial-i].getFicha().equals(ficha)) {
                 contadorFichasIguales++;
             } else {
@@ -156,11 +157,11 @@ public class Tablero {
                     tablero.append(casillas[i][j].getFicha());
                 }
             }
-            tablero.append("|%n");
+            tablero.append("|\n");
         }
         tablero.append(" ");
         tablero.append("-".repeat(COLUMNAS));
-        tablero.append("%n");
+        tablero.append("\n");
 
         return String.format(tablero.toString());
     }
