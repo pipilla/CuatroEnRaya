@@ -20,24 +20,31 @@ public class CuatroEnRaya {
 
     private boolean tirar(Jugador jugador) throws OperationNotSupportedException {
         boolean tirada = false;
-        do {
-            try {
-                tirada = tablero.introducirFicha(Consola.leerColumna(jugador), jugador.colorFichas());
-            } catch (IllegalArgumentException e) {
-                System.out.println(e);
-            }
-        } while (!tirada);
-
+        try {
+            tirada = tablero.introducirFicha(Consola.leerColumna(jugador), jugador.colorFichas());
+        } catch (IllegalArgumentException e) {
+            System.out.println(e);
+        }
         return tirada;
     }
 
     public void jugar() throws OperationNotSupportedException {
         boolean partidaFinalizada = false;
         int jugadorGanador = 1;
-        for (int i = 0; !partidaFinalizada; i++) {
+        int i = 0;
+        do {
             partidaFinalizada = tirar(jugador[i]);
-            jugadorGanador = i;
-        }
+            System.out.println(tablero);
+            if (partidaFinalizada) {
+                jugadorGanador = i;
+            }
+            if (i == 0){
+                i = 1;
+            } else {
+                i = 0;
+            }
+        } while (!partidaFinalizada);
+
         System.out.println("El jugador ganador es: " + jugador[jugadorGanador]);
 
     }

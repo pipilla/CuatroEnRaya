@@ -1,17 +1,11 @@
 package org.iesalandalus.programacion.cuatroenraya.modelo;
 
 public enum Ficha {
-    AZUL('A'),
-    VERDE('V');
-
-    private final char letraFicha;
-
-    Ficha(char letraFicha) {
-        this.letraFicha = letraFicha;
-    }
+    AZUL,
+    VERDE;
 
     @Override
     public String toString() {
-        return String.format("%s", this.letraFicha);
+        return name().substring(0,1);
     }
 }

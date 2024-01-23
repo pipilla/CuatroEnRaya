@@ -16,7 +16,7 @@ public class Casilla {
 
     public void setFicha(Ficha ficha) throws OperationNotSupportedException {
         Objects.requireNonNull(ficha, "No se puede poner una ficha nula.");
-        if (this.ficha != null) {
+        if (estaOcupada()) {
             throw new OperationNotSupportedException("La casilla ya contiene una ficha.");
         }
         this.ficha = ficha;
@@ -28,10 +28,6 @@ public class Casilla {
 
     @Override
     public String toString() {
-        if (ficha == null){
-            return " ";
-        } else {
-            return String.format("%s", this.ficha);
-        }
+        return estaOcupada() ? ficha.toString() : " ";
     }
 }
