@@ -40,6 +40,7 @@ public class CuatroEnRaya {
             jugadorQueJuega = jugadores[turno++ % NUMERO_JUGADORES];
             hayGanador = tirar(jugadorQueJuega);
         }
+        System.out.println(tablero);
         if (hayGanador) {
             System.out.println("El jugador ganador es: " + jugadorQueJuega.nombre());
         } else {
