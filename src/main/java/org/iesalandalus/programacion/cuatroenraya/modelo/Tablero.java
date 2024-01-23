@@ -19,7 +19,7 @@ public class Tablero {
     }
 
     private boolean columnaVacia(int columna){
-        return casillas[0][columna].estaOcupada();
+        return !casillas[0][columna].estaOcupada();
     }
 
     public boolean estaVacio(){
@@ -80,15 +80,15 @@ public class Tablero {
     }
 
     private boolean comprobarVertical(int columna, Ficha ficha){
-        int contadorFichasIguales = 0;
-        for (int i = 0; i < FILAS && !objetivoAlcanzado(contadorFichasIguales); i++){
+        int fichasIgualesConsecutivas = 0;
+        for (int i = 0; i < FILAS && !objetivoAlcanzado(fichasIgualesConsecutivas); i++){
             if (casillas[i][columna].estaOcupada() && casillas[i][columna].getFicha().equals(ficha)) {
-                contadorFichasIguales++;
+                fichasIgualesConsecutivas++;
             } else {
-                contadorFichasIguales = 0;
+                fichasIgualesConsecutivas = 0;
             }
         }
-        return (objetivoAlcanzado(contadorFichasIguales));
+        return (objetivoAlcanzado(fichasIgualesConsecutivas));
     }
     private int menor(int fila, int columna){
         return Math.min(fila, columna);
@@ -98,42 +98,30 @@ public class Tablero {
         int desplazamiento = menor(filaSemilla, columnaSemilla);
         int filaInicial = filaSemilla - desplazamiento;
         int columnaInicial = columnaSemilla - desplazamiento;
-        desplazamiento = menor(FILAS - 1 - filaInicial, COLUMNAS - 1 - columnaInicial);
         int contadorFichasIguales = 0;
-        boolean conseguido = false;
-        for (int i = 0; i < desplazamiento; i++){
-            if (casillas[filaInicial+i][columnaInicial+i].estaOcupada() && casillas[filaInicial+i][columnaInicial+i].getFicha().equals(ficha)) {
+        for (int fila = filaInicial, columna = columnaInicial; fila < FILAS && columna < COLUMNAS && !objetivoAlcanzado(contadorFichasIguales); fila++, columna++){
+            if (casillas[fila][columna].estaOcupada() && casillas[fila][columna].getFicha().equals(ficha)) {
                 contadorFichasIguales++;
             } else {
                 contadorFichasIguales = 0;
             }
-            if (objetivoAlcanzado(contadorFichasIguales)){
-                conseguido = true;
-                break;
-            }
         }
-        return conseguido;
+        return (objetivoAlcanzado(contadorFichasIguales));
     }
 
     private boolean comprobarDiagonalNO(int filaSemilla, int columnaSemilla, Ficha ficha) {
         int desplazamiento = menor(filaSemilla, COLUMNAS - 1 - columnaSemilla);
         int filaInicial = filaSemilla - desplazamiento;
         int columnaInicial = columnaSemilla + desplazamiento;
-        desplazamiento = menor(filaInicial, columnaInicial);
         int contadorFichasIguales = 0;
-        boolean conseguido = false;
-        for (int i = 0; i < desplazamiento; i++){
-            if (casillas[filaInicial+i][columnaInicial-i].estaOcupada() && casillas[filaInicial+i][columnaInicial-i].getFicha().equals(ficha)) {
+        for (int fila = filaInicial, columna = columnaInicial; fila < FILAS && columna >= 0 && !objetivoAlcanzado(contadorFichasIguales); fila++, columna--){
+            if (casillas[fila][columna].estaOcupada() && casillas[fila][columna].getFicha().equals(ficha)) {
                 contadorFichasIguales++;
             } else {
                 contadorFichasIguales = 0;
             }
-            if (objetivoAlcanzado(contadorFichasIguales)){
-                conseguido = true;
-                break;
-            }
         }
-        return (conseguido);
+        return (objetivoAlcanzado(contadorFichasIguales));
     }
 
     private boolean comprobarTirada(int fila, int columna){
@@ -142,7 +130,9 @@ public class Tablero {
     }
 
     public boolean introducirFicha(int columna, Ficha ficha) throws OperationNotSupportedException {
-
+        if (estaLleno()) {
+            throw new IllegalArgumentException("Tablero lleno.");
+        }
         comprobarColumna(columna);
         comprobarFicha(ficha);
         if (columnaLlena(columna)) {
