@@ -20,6 +20,6 @@ public record Jugador(String nombre, Ficha colorFichas) {
 
     @Override
     public String toString() {
-        return String.format("%s (%s)", this.nombre, this.colorFichas);
+        return String.format("%s (%s)", nombre, colorFichas);
     }
 }
