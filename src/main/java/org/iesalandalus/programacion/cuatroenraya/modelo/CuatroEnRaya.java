@@ -25,10 +25,11 @@ public class CuatroEnRaya {
             try {
                 jugadaGanadora = tablero.introducirFicha(Consola.leerColumna(jugador), jugador.colorFichas());
                 jugadaValida = true;
-            } catch (IllegalArgumentException e) {
+            } catch (OperationNotSupportedException e) {
                 System.out.println(e.getMessage());
             }
         } while (!jugadaValida);
+        System.out.println(tablero);
         return jugadaGanadora;
     }
 
@@ -40,7 +41,6 @@ public class CuatroEnRaya {
             jugadorQueJuega = jugadores[turno++ % NUMERO_JUGADORES];
             hayGanador = tirar(jugadorQueJuega);
         }
-        System.out.println(tablero);
         if (hayGanador) {
             System.out.println("El jugador ganador es: " + jugadorQueJuega.nombre());
         } else {
